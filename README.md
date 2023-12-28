@@ -1,5 +1,5 @@
 # Simple K8s Deployer
-**Simple K8s Deployer** is a **BASH** script that can be used to provision 3 instances on aws with terraform then initialize the K3s cluster using ansible playbooks.
+**Simple K8s Deployer** is a **BASH** script that can be used to provision 3 instances on aws with terraform then initialize the K3s cluster using ansible playbooks or initialize it on your on-prem/local VMs by adding your VMs IPs in the ansible/inventory.ini.
 
 ---
 
