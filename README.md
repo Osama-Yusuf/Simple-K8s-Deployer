@@ -13,8 +13,8 @@
 
 ### Install:
 ```
-git clone https://github.com/Osama-Yusuf/Kubernetes-init-cluster.git
-cd Kubernetes-init-cluster && chmod +x hostname.sh 
+git clone https://github.com/Osama-Yusuf/Simple-K8s-Deployer.git
+cd Simple-K8s-Deployer && chmod +x brain.sh 
 ```
 
 ### Usage:
