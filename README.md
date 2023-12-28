@@ -27,6 +27,16 @@ cd Simple-K8s-Deployer && chmod +x brain.sh
 Example: ./brain.sh -t --debug
 ```
 
+### Notes:
+For terraform
+if you desire to provision it on aws with terraform you don't need to configure anything but if you want to change things around you can change the vars in brain.sh, terraform/variables.tf (DO NOT CHANGE THE KEY NAME IN THE terraform/variables.tf or it won't work, but you can change it in the brain.sh)
+
+For on-prem/local
+Yet I haven't enhancd the code to accept multble keys for each vm, so it currently only work if all VMs are on the same user and key.
+   A quick fix to that is to add your public key to your VMs, and with that it will work with just your private key or without mentioning anything.
+
+For both
+   so far there must be only one master and two workers, i'm currently working on a enhancement for that, if you made any other configuration than this it won't work
 ---
 
 ## What it does:
