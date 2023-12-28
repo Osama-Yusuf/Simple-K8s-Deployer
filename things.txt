@@ -1,0 +1,10 @@
+k3-todo:
+1- remove some of the limits like the possiblity to be there more than one master with the urls here 
+  https://docs.k3s.io/datastore/ha-embedded
+  https://blog.alexellis.io/multi-master-ha-kubernetes-in-5-minutes/
+2- add config file for terraform which user input his needs if he didn't it will go with the defaults 
+  a- how many nodes and how many masters and workers
+3- change -t to -r and the -t should be only creating the ec2s
+4- validate if the choosed key is already there or not 
+5- add another types of k8s like rke2 and kubeadm
+6- add a public ip to the kubeconfig check this tls-san in the first link above

@@ -1,0 +1,51 @@
+- name: Setup Kubernetes Master
+  hosts: master
+  become: true
+  vars:
+    ansible_user: "{{ ansible_user }}"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+  tasks:
+
+  - name: Initialize master and create k3s token
+    shell: |
+      #!/bin/bash
+      curl -sfL https://get.k3s.io | sh -
+      cp -f /var/lib/rancher/k3s/server/node-token /home/{{ ansible_user }}/token.txt
+
+      mkdir -p /home/{{ ansible_user }}/.kube
+      sudo cp /etc/rancher/k3s/k3s.yaml /home/{{ ansible_user }}/.kube/config
+      sudo chown {{ ansible_user }}:{{ ansible_user }} /home/{{ ansible_user }}/.kube/config
+      chmod 600 /home/{{ ansible_user }}/.kube/config
+      sudo chown ubuntu:ubuntu /etc/rancher/k3s/k3s.yaml
+
+      sudo apt install -y bash-completion && echo "source <(kubectl completion bash)" >> ~/.bashrc && source ~/.bashrc
+    args:
+      executable: /bin/bash
+
+  - name: Fetch token.txt from master node
+    fetch:
+      src: /home/{{ ansible_user }}/token.txt
+      dest: token.txt
+      flat: yes
+      mode: u=rwx,g=rx,o=rx
+
+- name: Setup Kubernetes Workers
+  hosts: worker
+  become: true
+  vars:
+    ansible_user: "{{ ansible_user }}"
+    ansible_ssh_private_key_file: "{{ ansible_ssh_private_key_file }}"
+    master_ip: "{{ master_ip }}"
+  tasks:
+  - name: Transfer the token to all worker nodes
+    copy:
+      src: token.txt
+      dest: /home/{{ ansible_user }}/token.txt
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: u=rwx,g=rx,o=rx
+      backup: yes
+
+  - name: Join the workers to the cluster with the token
+    shell: |
+      curl -sfL https://get.k3s.io | K3S_URL=https://{{ master_ip }}:6443 K3S_TOKEN=$(cat /home/{{ ansible_user }}/token.txt) sh -
